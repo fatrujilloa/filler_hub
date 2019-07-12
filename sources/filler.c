@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   filler.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ftrujill <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 22:25:35 by ftrujill          #+#    #+#             */
-/*   Updated: 2019/07/12 11:27:48 by ftrujill         ###   ########.fr       */
+/*   Updated: 2019/07/12 12:16:50 by ftrujill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
 #include "../libft/libft.h"
+#include <stdio.h>
+#include <fcntl.h>
 
 int     prt_error(int fd)
 {
@@ -71,7 +73,7 @@ void    free_tab(t_tab *tab)
     free(tab);
 }
 
-void    free_all(char **line, t_tab *map, t_tab *piece)
+void    free_all(char **line, t_tab *map, t_tab *piece, int fd)
 {
     int i;
 
@@ -131,15 +133,6 @@ int     copy_piece(char *line, t_tab *piece, int fd)
         ft_putstr_fd(piece->tab[i], fd);
     i++;
     }
-    /* If I ask him to read one more it stops working...
-    
-    ft_putstr_fd("Here is the number ", fd);
-    ft_putnbr_fd(read(0, line, 1), fd);
-     while(c)
-    {
-        ft_putnbr_fd(c, fd);
-        c = read(0, line, 1);
-    }*/
     return (1);
 }
 
@@ -161,7 +154,7 @@ void     reset_piece(t_tab *piece, t_tab *map)
             ft_memset(piece->tab[i++], 0, map->y + 1);
 }
 
-int     copy_map(t_tab *map, int fd)
+int     copy_map(char *line, t_tab *map, int fd)
 {
     int i;
     int j;
@@ -183,9 +176,6 @@ int     copy_map(t_tab *map, int fd)
         ft_putstr_fd(map->tab[i], fd);
     i++;
     }
-    /* read(0, line, 4);
-    read(0, map->tab[i], map->y + 1);
-    ft_putstr_fd(map->tab[i], fd);*/
     return (1);
 }
 
@@ -223,7 +213,6 @@ int     valid_pos(t_tab *map, t_tab *piece, int x, int y, int fd)
     int j;
     int r;
 
-    (void)fd;
     if (!(x + piece->x_min >= 0 && x + piece->x_max < map->x
         && y + piece->y_min >= 0 && y + piece->y_max < map->y))
         return (0);
@@ -249,13 +238,6 @@ int     valid_pos(t_tab *map, t_tab *piece, int x, int y, int fd)
         }
         i++;
     }
-  /*   write(fd, "\nPosition ", 10);
-    ft_putnbr_fd(x, fd);
-    write(fd, " ", 1);
-    ft_putnbr_fd(y, fd);
-    write(fd, " ", 1);
-    ft_putnbr_fd(r, fd);
-*/
     return (r);
 }
 
@@ -365,6 +347,7 @@ int    write_pos(t_tab *map, t_tab *piece, int fd)
     return (best_x != -map->x ? 1 : 0);
 }
 
+
 int     pass_lines(int n)
 {
     char c;
@@ -381,7 +364,7 @@ int     pass_lines(int n)
     return (1);
 }
 
-int     main()
+int     main(int argc, char **argv)
 {
 
     int fd;
@@ -390,6 +373,7 @@ int     main()
     t_tab   *map;
     t_tab   *piece;
     char    *line;
+    int     l_size;
     int i;
 
     if (!(map = (t_tab*)malloc(sizeof(t_tab))) || 
@@ -437,7 +421,7 @@ int     main()
     read(0, line, map->y + 6);
     ft_putstr_fd(line, fd2);
     reset_map(map);
-    copy_map(map, fd2);
+    copy_map(line, map, fd2);
     reset_piece(piece, map);
     copy_piece(line, piece, fd2);
     c = write_pos(map, piece, fd2);
@@ -449,6 +433,8 @@ int     main()
             read(0, line, 1);
             while (*line != '\n')
             {
+               // write(fd2, line, 1);
+                //write(fd2, "\n", 1);
                 read(0, line, 1);
             }
             i++;
@@ -456,11 +442,63 @@ int     main()
         write(fd2, "END\n", 4);
         ft_memset(line, 0, 50);
         reset_map(map);
-        copy_map(map, fd2);
+        copy_map(line, map, fd2);
         reset_piece(piece, map);
         copy_piece(line, piece, fd2);
         c = write_pos(map, piece, fd2);
     }
+
+
+
+
+/* 
+    if (!(init(line, map, piece, fd)))
+        return (0);
+    if (!get_next_line(0, line) || (l_size = ft_strlen(*line)) < map->y)
+        return (prt_error(fd2));
+    free(*line);
+    if (!copy_map(line, map, fd2, l_size))
+        return (0);
+    prt_tab(map, fd2);
+    if (!copy_piece(line, piece, fd2))
+        return (0);
+    prt_tab(piece, fd2);
+    write_pos(map, piece, fd2);
+    //write(1, "1 1\n", 4);
+    while(get_next_line(0, line) && **line == 'P')
+    {
+        free(*line);
+        if (!get_next_line(0, line) || **line != ' ' || ft_strlen(*line) != map->y + 4)
+            {
+                ft_putstr_fd("Error in    01234567\n", fd2);
+                ft_putstr_fd(*line, fd2);
+                break ;
+            }
+        if (!copy_map(line, map, fd2, l_size))
+            {
+                break ;
+            }
+        prt_tab(map, fd2);
+        if (!copy_piece(line, piece, fd2))
+            break ;
+        prt_tab(piece, fd2);
+        write_pos(map, piece, fd2);
+       // write(1, "1 1\n", 4);
+    }
+    write(fd2, "Got out\n", 8);
+    /*
+    while(get_next_line(0, line))
+    {
+        ft_putstr_fd(*line, fd);
+        write(fd, "\n", 1);
+        if (**line == '.' || **line == '*')
+            write(1, "1 1\n", 4);
+        free(*line);
+        i++;
+    }
+    free(*line);
+    free_all(line, map, piece, fd);
+    write(fd, "GAME OVER\n", 10);*/
     close (fd);
     close (fd2);
     return (0);
