@@ -6,7 +6,7 @@
 #    By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/29 13:27:24 by ftrujill          #+#    #+#              #
-#    Updated: 2019/06/22 19:06:25 by ftrujill         ###   ########.fr        #
+#    Updated: 2019/07/12 14:46:06 by ftrujill         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ OBJ_NAME = $(SRC_NAME:.c=.o)
 
 INC_NAME = filler.h
 
-SRC_NAME = filler.c
+SRC_NAME = aux.c minimization.c filler.c
 
 all: $(NAME) $(SRC) $(OBJ) $(INC)
 
@@ -38,7 +38,7 @@ all: $(NAME) $(SRC) $(OBJ) $(INC)
 
 $(NAME): $(OBJ_PATH) $(OBJ)
 	@make -C $(LFT_PATH)
-	@$(CC) $(CC_FLAGS) -o $(NAME) $(OBJ) -I $(INC_PATH) -L $(LFT_PATH) -lft
+	@$(CC) $(CC_FLAGS) -I $(INC_PATH) $(OBJ) -L $(LFT_PATH) -lft -o $(NAME)
 
 $(OBJ_PATH):
 	@mkdir -p $(OBJ_DIR)

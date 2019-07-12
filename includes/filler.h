@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filler.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftrujill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 22:27:42 by ftrujill          #+#    #+#             */
-/*   Updated: 2019/06/17 15:13:21 by ftrujill         ###   ########.fr       */
+/*   Updated: 2019/07/12 15:28:33 by ftrujill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,13 @@ typedef struct	s_tab
 	char		**tab;
 }				t_tab;
 
-typedef struct	s_map
-{
-	char		c;
-	int         x;
-    int         y;
-	int			p_x;
-	int			p_y;
-	int			l_size;
-	char		**map;
-	char		**piece;
-}				t_map;
+void    		initialize(char *line, t_tab *piece, t_tab *map);
+void			free_tab(t_tab *tab);
+void			free_all(char **line, t_tab *map, t_tab *piece);
+void			reset_map(t_tab *map);
+void			reset_piece(t_tab *piece, t_tab *map);
+int				ft_abs(int x);
+int				write_pos(t_tab *map, t_tab *piece, int best_x, int best_y);
+
 
 #endif
