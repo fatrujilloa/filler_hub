@@ -6,7 +6,7 @@
 /*   By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/12 14:47:22 by ftrujill          #+#    #+#             */
-/*   Updated: 2019/07/12 15:28:46 by ftrujill         ###   ########.fr       */
+/*   Updated: 2019/07/13 11:45:55 by ftrujill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,34 +33,6 @@ void	initialize(char *line, t_tab *piece, t_tab *map)
 	map->y = ft_atoi(line);
 }
 
-void	free_tab(t_tab *tab)
-{
-	int i;
-
-	i = 0;
-	while (i < tab->x)
-		free(tab->tab[i++]);
-	free(tab->tab);
-	free(tab);
-}
-
-void	free_all(char **line, t_tab *map, t_tab *piece)
-{
-	int i;
-
-	i = 0;
-	while (i <= map->x)
-	{
-		free(map->tab[i]);
-		free(piece->tab[i++]);
-	}
-	free(map->tab);
-	free(piece->tab);
-	free(map);
-	free(piece);
-	free(line);
-}
-
 void	reset_map(t_tab *map)
 {
 	int i;
@@ -77,4 +49,21 @@ void	reset_piece(t_tab *piece, t_tab *map)
 	i = 0;
 	while (i < map->x)
 		ft_memset(piece->tab[i++], 0, map->y + 1);
+}
+
+void	free_all(char *line, t_tab *piece, t_tab *map)
+{
+	int i;
+
+	free(line);
+	i = 0;
+	while (i < map->x)
+	{
+		free(piece->tab[i]);
+		free(map->tab[i++]);
+	}
+	free(piece->tab);
+	free(piece);
+	free(map->tab);
+	free(map);
 }

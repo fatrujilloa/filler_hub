@@ -6,7 +6,7 @@
 /*   By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/12 14:48:53 by ftrujill          #+#    #+#             */
-/*   Updated: 2019/07/12 15:29:03 by ftrujill         ###   ########.fr       */
+/*   Updated: 2019/07/13 11:26:45 by ftrujill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int		filler(char *line, t_tab *piece, t_tab *map)
 		copy_piece(line, piece);
 		c = write_pos(map, piece, -map->x, -map->y);
 	}
+	free_all(line, piece, map);
 	return (0);
 }
 
