@@ -6,7 +6,7 @@
 /*   By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/12 14:51:14 by ftrujill          #+#    #+#             */
-/*   Updated: 2019/07/13 11:21:46 by ftrujill         ###   ########.fr       */
+/*   Updated: 2019/07/14 20:56:35 by ftrujill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,6 @@ int		write_pos(t_tab *map, t_tab *piece, int best_x, int best_y)
 			}
 		}
 	}
-	ft_printf("%d %d\n", best_x, best_y);
+	prt_pos(best_x, best_y);
 	return (best_x != -map->x ? 1 : 0);
 }

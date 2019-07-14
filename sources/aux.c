@@ -6,7 +6,7 @@
 /*   By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/12 14:47:22 by ftrujill          #+#    #+#             */
-/*   Updated: 2019/07/13 11:45:55 by ftrujill         ###   ########.fr       */
+/*   Updated: 2019/07/14 20:56:43 by ftrujill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,14 @@ void	reset_piece(t_tab *piece, t_tab *map)
 	i = 0;
 	while (i < map->x)
 		ft_memset(piece->tab[i++], 0, map->y + 1);
+}
+
+void	prt_pos(int best_x, int best_y)
+{
+	ft_putnbr(best_x);
+	write(1, " ", 1);
+	ft_putnbr(best_y);
+	write(1, "\n", 1);
 }
 
 void	free_all(char *line, t_tab *piece, t_tab *map)
