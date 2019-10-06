@@ -6,7 +6,7 @@
 /*   By: ftrujill <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/04 16:01:37 by ftrujill          #+#    #+#             */
-/*   Updated: 2019/10/06 11:46:20 by ftrujill         ###   ########.fr       */
+/*   Updated: 2019/10/06 12:12:06 by ftrujill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@ void    create_board(int l, int w, WINDOW **board)
     int i;
     int j;
 
-    initscr();
-    noecho();
-    cbreak();
-    refresh();
-    start_color();
-    scrollok(stdscr,TRUE);
     i = 0;
     while (i < l * w)
     {
@@ -93,6 +87,12 @@ int     main(int argc, char **argv)
     WINDOW  **board;
     char c;
 
+    initscr();
+    noecho();
+    cbreak();
+    refresh();
+    start_color();
+    scrollok(stdscr,TRUE);
     while(get_next_line(0, &line) && *line != 'P')
         free(line);
     i = 0;
@@ -106,9 +106,9 @@ int     main(int argc, char **argv)
     board = (WINDOW**)malloc(sizeof(WINDOW*) * w * l);
     create_board(l, w, board);
     filler_on_board(l, w, board);
-    refresh();
     sleep(5);
     endwin();
+    free(board);
     return(0);
 }
 
