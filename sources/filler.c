@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   filler.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: auguyon <auguyon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/12 14:48:53 by ftrujill          #+#    #+#             */
-/*   Updated: 2019/07/14 20:58:02 by ftrujill         ###   ########.fr       */
+/*   Created: 2018/11/12 17:35:00 by auguyon           #+#    #+#             */
+/*   Updated: 2019/10/13 17:06:39 by auguyon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
-#include "../libft/libft.h"
 
 int		copy_piece_2(t_tab *piece)
 {
@@ -35,7 +34,7 @@ int		copy_piece(char *line, t_tab *piece)
 {
 	int i;
 
-	ft_memset(line, 0, 50);
+	ft_bzero(line, 50);
 	read(0, line, 1);
 	while (!ft_isdigit(*line))
 		read(0, line, 1);
@@ -43,7 +42,7 @@ int		copy_piece(char *line, t_tab *piece)
 	while (read(0, line + i, 1) && ft_isdigit(line[i]))
 		i++;
 	piece->x = ft_atoi(line);
-	ft_memset(line, 0, 50);
+	ft_bzero(line, 50);
 	read(0, line, 1);
 	while (!ft_isdigit(*line))
 		read(0, line, 1);
@@ -94,10 +93,9 @@ int		filler(char *line, t_tab *piece, t_tab *map)
 			while (*line != '\n')
 				read(0, line, 1);
 		}
-		ft_memset(line, 0, 50);
-		reset_map(map);
+		ft_bzero(line, 50);
+		reset(piece, map);
 		copy_map(map);
-		reset_piece(piece, map);
 		copy_piece(line, piece);
 		c = write_pos(map, piece, -map->x, -map->y);
 	}
@@ -112,23 +110,22 @@ int		main(void)
 	char	*line;
 	int		i;
 
-	if (!(map = (t_tab*)malloc(sizeof(t_tab))) ||
-		!(piece = (t_tab*)malloc(sizeof(t_tab))) ||
-		!(line = (char*)ft_memalloc(50)))
+	if (!(map = (t_tab*)malloc(sizeof(t_tab)))
+		|| !(piece = (t_tab*)malloc(sizeof(t_tab)))
+			|| !(line = (char*)ft_memalloc(50)))
 		return (0);
-	initialize(line, piece, map);
-	if (!(map->tab = (char**)malloc(sizeof(char*) * (map->x + 1))) ||
-		!(piece->tab = (char**)malloc(sizeof(char*) * (map->x + 1))))
+	initialize(piece, map);
+	if (!(map->tab = (char**)malloc(sizeof(char*) * (map->x + 1)))
+		|| !(piece->tab = (char**)malloc(sizeof(char*) * (map->x + 1))))
 		return (0);
 	i = -1;
 	while (++i < map->x)
-		if (!(map->tab[i] = (char*)ft_memalloc(map->y + 1)) ||
-			!(piece->tab[i] = (char*)ft_memalloc(map->y + 1)))
+		if (!(map->tab[i] = (char*)ft_memalloc(map->y + 1))
+			|| !(piece->tab[i] = (char*)ft_memalloc(map->y + 1)))
 			return (0);
-	ft_memset(line, 0, 50);
+	ft_bzero(line, 50);
 	read(0, line, map->y + 6);
-	reset_map(map);
+	reset(piece, map);
 	copy_map(map);
-	reset_piece(piece, map);
 	return (filler(line, piece, map));
 }

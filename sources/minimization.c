@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minimization.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: auguyon <auguyon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/12 14:51:14 by ftrujill          #+#    #+#             */
-/*   Updated: 2019/07/14 20:56:35 by ftrujill         ###   ########.fr       */
+/*   Created: 2018/11/12 17:35:00 by auguyon           #+#    #+#             */
+/*   Updated: 2019/10/13 17:07:50 by auguyon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
-#include "../libft/libft.h"
 
 void	min_piece(t_tab *piece)
 {
@@ -30,10 +29,10 @@ void	min_piece(t_tab *piece)
 		{
 			if (piece->tab[i][j] == '*')
 			{
-				piece->x_min = ft_min_int(piece->x_min, i);
-				piece->x_max = ft_max_int(piece->x_max, i);
-				piece->y_min = ft_min_int(piece->y_min, j);
-				piece->y_max = ft_max_int(piece->y_max, j);
+				piece->x_min = ft_min(piece->x_min, i);
+				piece->x_max = ft_max(piece->x_max, i);
+				piece->y_min = ft_min(piece->y_min, j);
+				piece->y_max = ft_max(piece->y_max, j);
 			}
 			j++;
 		}
@@ -109,7 +108,7 @@ int		distance(t_tab *map, t_tab *piece, int x, int y)
 		{
 			nb = ngbs(map, i, j);
 			if (map->tab[i][j] == piece->c && nb > 0)
-				min += nb * (ft_abs_int(x - i) + ft_abs_int(y - j));
+				min += nb * (ft_abs(x - i) + ft_abs(y - j));
 			j++;
 		}
 		i++;

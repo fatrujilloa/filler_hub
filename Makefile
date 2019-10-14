@@ -3,59 +3,77 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+         #
+#    By: auguyon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2019/05/29 13:27:24 by ftrujill          #+#    #+#              #
-#    Updated: 2019/07/14 19:52:39 by ftrujill         ###   ########.fr        #
+#    Created: 2019/07/17 17:43:49 by auguyon           #+#    #+#              #
+#    Updated: 2019/07/17 17:43:56 by auguyon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ftrujill.filler
+NAME	=	auguyon.filler
 
-CC = gcc
-CC_FLAGS = -g -Wall -Werror -Wextra
+SRCS	=	sources/aux.c sources/filler.c sources/minimization.c
 
-OBJ_DIR = objects
+CC		=	gcc
 
-SRC_PATH = ./sources/
-OBJ_PATH = ./$(OBJ_DIR)/
-INC_PATH = ./includes/
-LFT_PATH = ./libft/
+INCL	=	-I libft/inc/ -I include/ \
 
-OBJ_NAME = $(SRC_NAME:.c=.o)
-INC_NAME = filler.h
-SRC_NAME = aux.c minimization.c filler.c
-LIB_NAME = libft.a
+INCL_NORM	=	libft/inc/ include/
 
-SRC = $(addprefix $(SRC_PATH),$(SRC_NAME))
-OBJ = $(addprefix $(OBJ_PATH),$(OBJ_NAME))
-INC = $(addprefix $(INC_PATH),$(INC_NAME))
-LIB = $(addprefix $(LFT_PATH),$(LIB_NAME))
+FLAGS	=	-Wall -Wextra -Werror
 
-all: $(NAME)
+OBJS	=	$(SRCS:.c=.o)
 
-.PHONY : all re clean fclean
+LIB		=	libft/libft.a
 
-$(NAME): $(OBJ_PATH) $(OBJ) $(LIB)
-	@$(CC) $(CC_FLAGS) -I $(INC_PATH) $(OBJ) -L $(LFT_PATH) -lft -o $(NAME)
+RM		=	rm -rf
 
-$(OBJ_PATH):
-	@mkdir -p $(OBJ_DIR)
+.SILENT	:
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c
-	@$(CC) $(CC_FLAGS) -I $(INC_PATH) -o $@ -c $< 
+.PHONY	: 	all clean fclean re
 
-$(LIB):
-	@make -C $(LFT_PATH)
+#Colors
+_BLACK=\x1b[30m
+_RED=\x1b[31m
+_GREEN=\x1b[32m
+_YELLOW=\x1b[33m
+_BLUE=\x1b[34m
+_PURPLE=\x1b[35m
+_CYAN=\x1b[36m
+_WHITE=\x1b[37m
+_END=\x1b[0m
 
-clean:
-	@rm -rf $(OBJ)
-	@mkdir -p $(OBJ_DIR)
-	@rmdir $(OBJ_DIR)
-	@make -C $(LFT_PATH) clean
+all		:	$(NAME)
 
-fclean: clean
-	@rm -f $(NAME)
-	@make -C $(LFT_PATH) fclean
+$(NAME)	:	$(OBJS)
+			make -C libft/
+			echo "$(_RED)Compiling libft... $(_GREEN)Done$(_END)"
+			$(CC) -o $(NAME) $(OBJS) $(LIB) $(FWORK)
 
-re: fclean all
+$(OBJS)	: 	%.o: %.c
+			$(CC) $(FLAGS) $(INCL) -c $< -o $@
+
+clean	:
+			make clean -C libft/
+			# make clean -C bonus/
+			$(RM) $(OBJS)
+			echo "$(_RED)Cleaning obj... $(_GREEN)Done$(_END)"
+
+fclean	:	clean
+			$(RM) $(NAME)
+			make fclean -C libft/
+			# make fclean -C bonus/
+			echo "$(_RED)Cleaning all... $(_GREEN)Done$(_END)"
+
+re		:	fclean all
+
+recl	:	re
+			make clean
+
+norm	:	fclean
+			echo "$(_RED)Starting norminette...$(_END)"
+			norminette $(SRCS) $(INCL_NORM) | grep -B 1 '^Error' 2> /dev/null && echo "$(_RED)Norm KO :(" || echo "$(_GREEN)Norm OK ! :)$(_END)";
+
+bonus	:
+			make -C Bonus/
+			$(CC) -o Generator maps_generator.c ../libft/libft.a

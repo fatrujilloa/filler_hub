@@ -3,52 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   aux.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: auguyon <auguyon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/12 14:47:22 by ftrujill          #+#    #+#             */
-/*   Updated: 2019/07/14 20:56:43 by ftrujill         ###   ########.fr       */
+/*   Created: 2018/11/12 17:35:00 by auguyon           #+#    #+#             */
+/*   Updated: 2019/10/13 17:24:38 by auguyon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
-#include "../libft/libft.h"
 
-void	initialize(char *line, t_tab *piece, t_tab *map)
+void	initialize(t_tab *piece, t_tab *map)
 {
+	char *line;
 	int i;
 
-	read(0, line, 34);
-	map->c = line[10] == '1' ? 'O' : 'X';
-	piece->c = line[10] == '1' ? 'X' : 'O';
-	read(0, line, 8);
-	ft_memset(line, 0, 50);
-	i = 0;
-	while (read(0, line + i, 1) && ft_isdigit(line[i]))
-		i++;
+	get_next_line(0, &line);
+	map->c = ft_strstr(line, "auguyon") > 0 ? 'O' : 'X';
+	piece->c = map->c == 'O' ? 'X' : 'O';
+	free(line);
+	get_next_line(0, &line);
+	i = 8;
 	map->x = ft_atoi(line);
-	ft_memset(line, 0, 50);
-	i = 0;
-	while (read(0, line + i, 1) && ft_isdigit(line[i]))
+	while (line[i] != ' ')
 		i++;
 	map->y = ft_atoi(line);
+	free(line);
 }
 
-void	reset_map(t_tab *map)
+void	reset(t_tab *piece, t_tab *map)
 {
 	int i;
 
 	i = 0;
 	while (i < map->x)
-		ft_memset(map->tab[i++], 0, map->y + 1);
-}
-
-void	reset_piece(t_tab *piece, t_tab *map)
-{
-	int i;
-
+		ft_bzero(map->tab[i++], map->y + 1);
 	i = 0;
 	while (i < map->x)
-		ft_memset(piece->tab[i++], 0, map->y + 1);
+		ft_bzero(piece->tab[i++], map->y + 1);
 }
 
 void	prt_pos(int best_x, int best_y)
@@ -63,8 +54,8 @@ void	free_all(char *line, t_tab *piece, t_tab *map)
 {
 	int i;
 
-	free(line);
 	i = 0;
+	free(line);
 	while (i < map->x)
 	{
 		free(piece->tab[i]);

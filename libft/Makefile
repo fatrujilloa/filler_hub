@@ -1,121 +1,115 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
+#    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ftrujill <ftrujill@student.42.fr>          +#+  +:+       +#+         #
+#    By: auguyon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/07/17 19:36:27 by ftrujill          #+#    #+#              #
-#    Updated: 2019/07/13 16:24:20 by ftrujill         ###   ########.fr        #
+#    Created: 2019/07/17 17:43:49 by auguyon           #+#    #+#              #
+#    Updated: 2019/07/17 17:43:56 by auguyon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 			libft.a
+SHELL			:= /bin/sh
+.SUFFIXES		:=
+.SUFFIXES		:= .c .o
+.DEFAULT_GOAL	:= all
+DEBUG			:= 0
 
-CFLAGS = 		-Wall -Wextra -Werror
+CC				:= gcc
 
-SRC =			ft_printf.c get_arg.c aux_print.c aux.c conversions_1.c conversions_2.c conversions_3.c\
-get_next_line.c\
-ft_index_rev.c\
-ft_itoa_base.c\
-ft_strlower.c\
-ft_max_int.c\
-ft_min_int.c\
-ft_abs_int.c\
-ft_max.c\
-ft_min.c\
-ft_lstdelnext.c\
-ft_realloc.c\
-ft_memindex.c\
-ft_memjoin_alloc.c\
-ft_memjoin_allocf.c\
-ft_atoi.c\
-ft_atoi_ovflw.c\
-ft_bzero.c\
-ft_index.c\
-ft_index_uc.c\
-ft_isalnum.c\
-ft_isalpha.c\
-ft_isascii.c\
-ft_isdigit.c\
-ft_isprint.c\
-ft_isstrnum.c\
-ft_itoa.c\
-ft_lstadd.c\
-ft_lstdel.c\
-ft_lstdelone.c\
-ft_lstiter.c\
-ft_lstmap.c\
-ft_lstnew.c\
-ft_lstprt.c\
-ft_memalloc.c\
-ft_memccpy.c\
-ft_memchr.c\
-ft_memcmp.c\
-ft_memcpy.c\
-ft_memdel.c\
-ft_memlap_fwd.c\
-ft_memmove.c\
-ft_memnlap_fwd.c\
-ft_memset.c\
-ft_print_params.c\
-ft_print_tab.c\
-ft_putchar.c\
-ft_putchar_fd.c\
-ft_putendl.c\
-ft_putendl_fd.c\
-ft_putnbr.c\
-ft_putnbr_fd.c\
-ft_putnstr.c\
-ft_putstr.c\
-ft_putstr_fd.c\
-ft_strcat.c\
-ft_strchr.c\
-ft_strclr.c\
-ft_strcmp.c\
-ft_strcpy.c\
-ft_strdel.c\
-ft_strdup.c\
-ft_strequ.c\
-ft_strrev.c\
-ft_striter.c\
-ft_striteri.c\
-ft_strjoin.c\
-ft_strlcat.c\
-ft_strlen.c\
-ft_strmap.c\
-ft_strmapi.c\
-ft_strncat.c\
-ft_strncmp.c\
-ft_strncpy.c\
-ft_strnequ.c\
-ft_strnew.c\
-ft_strnstr.c\
-ft_strrchr.c\
-ft_strsplit.c\
-ft_strstr.c\
-ft_strsub.c\
-ft_strtrim.c\
-ft_tolower.c\
-ft_toupper.c\
+ifeq ($(DEBUG), 0)
+	CFLAGS		:= -Wall -Wextra -Werror -O2
+else
+    CFLAGS		:= -Wall -Wextra -Werror -g3 -O0 -fsanitize=address
+endif
 
-OBJ = $(SRC:.c=.o)
+CFLAGS			+= -I ./inc
 
-all: $(NAME) $(SRC)
+NAME			:= libft.a
 
-$(NAME): $(OBJ)
-	@ar rc $(NAME) $(OBJ)
-	@ranlib libft.a
+VPATH			:= src
 
-%.o: %.c
-	@cc $(CFLAGS) -o $@ -c $<
+prtdir	:= print
+prt		:= ft_putchar.c ft_putchar_fd.c ft_putendl.c ft_putendl_fd.c
+prt		+= ft_putnbr.c ft_putnbr_fd.c ft_putstr.c ft_putstr_fd.c
+prt		:= $(addprefix $(prtdir)/, $(prt))
 
+listdir	:= list
+list	:= ft_lstadd.c ft_lstdel.c ft_lstdelone.c ft_lstnew.c ft_lstiter.c 
+list	+= ft_lstmap.c 
+list	:= $(addprefix $(listdir)/, $(list))
+
+memdir	:= mem
+mem		:= ft_bzero.c ft_memalloc.c ft_memccpy.c ft_memchr.c 
+mem		+= ft_memcmp.c ft_memcpy.c ft_memdel.c ft_memmove.c ft_memset.c 
+mem		+= ft_memlcat.c ft_memlcpy.c 
+mem		:= $(addprefix $(memdir)/, $(mem))
+
+strdir	:= str
+str		:= ft_strtrim.c ft_strsplit.c ft_strnew.c ft_strncmp.c ft_strmapi.c
+str		+= ft_strjoin.c ft_strdup.c ft_strcmp.c ft_strcchr.c ft_strdel.c
+str		+= ft_strsub.c ft_strrchr.c ft_strnequ.c ft_strnccmp.c ft_strmap.c
+str		+= ft_strstr.c ft_strnstr.c ft_strndup.c ft_strncat.c  ft_strlen.c
+str		+= ft_strspn.c ft_strnjoin.c ft_strncpy.c ft_strmultidel.c ft_strlcat.c
+str 	+= ft_striteri.c ft_strclr.c ft_strcat.c ft_striter.c ft_strcspn.c
+str		+= ft_strequ.c ft_strcpy.c ft_strccmp.c ft_strchr.c ft_strjoin_free.c
+str		:= $(addprefix $(strdir)/, $(str))
+
+toadir	:= toa
+toa 	:= ft_itoa.c ft_lltoa.c ft_stoa_base.c ft_ulltoa_base_caps.c ft_ctoa.c
+toa 	+= ft_ustoa_base_caps.c ft_utoa_base_caps.c ft_ztoa_base_caps.c
+toa 	+= ft_itoa_base.c ft_lltoa_base.c ft_ulltoa.c ft_ustoa.c ft_utoa.c
+toa 	+= ft_itoa_base_caps.c ft_stoa.c ft_ulltoa_base.c ft_ustoa_base.c
+toa 	+= ft_ztoa.c ft_utoa_base.c ft_ztoa_base.c ft_stoa_base_caps.c
+toa 	+= ft_dtoa.c ft_ldtoa.c ft_ldtoa_concat.c ft_uctoa_base.c ft_uctoa.c
+toa		+= ft_uctoa_base_caps.c
+toa		:= $(addprefix $(toadir)/, $(toa))
+
+utildir	:= utility
+util	:= ft_atoi.c ft_atoi_base.c ft_isdigit.c ft_min.c ft_max.c ft_abs.c
+util	:= $(addprefix $(utildir)/, $(util))
+
+gnldir	:= Get_Next_Line
+gnl		:= get_next_line.c
+gnl		:= $(addprefix $(gnldir)/, $(gnl))
+
+objdir	:= obj
+ddir	:= dep
+src		:= $(ctrl) $(prt) $(toa) $(list) $(util) $(mem) $(str) $(gnl)
+obj		:= $(addprefix $(objdir)/, $(src:%.c=%.o))
+dep		:= $(addprefix $(ddir)/, $(src:%.c=%.d))
+
+-include $(dep)
+
+%/.f:
+	mkdir -p $(@D)
+	touch $@
+
+.PRECIOUS: %/.f
+.SECONDEXPANSION:
+.PRECIOUS: $(obj)
+.SILENT:
+
+dname = $(subst $(1),$(2),$(basename $(3))).d
+$(objdir)/%.o:	%.c $$(@D)/.f $$(subst $(objdir),$(ddir),$$(@D))/.f
+	$(CC) $(CFLAGS) -c $< -o $@ -MMD -MP -MF $(call dname,$(objdir),$(ddir),$@)
+
+.PHONY: all
+all: $(NAME)
+
+ARFLAGS	:=	urcs
+.NOTPARALLEL: $(NAME)
+$(NAME): 	$$@($(obj))
+
+.PHONY: clean
 clean:
-	@rm -rf $(OBJ)
+	$(RM) -r $(objdir) $(ddir)
 
+.PHONY: fclean
 fclean: clean
-	@rm -rf $(NAME)
+	$(RM) $(NAME)
 
+.PHONY: re
+.NOTPARALLEL: re
 re: fclean all
-
-.PHONY: clean fclean re all
